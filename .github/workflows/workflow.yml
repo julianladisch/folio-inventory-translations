@@ -1,0 +1,40 @@
+name: Check *.tsv
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  tsvlint:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt install libtext-csv-perl
+      - name: Check translated-files/*.tsv
+        run: |
+          for f in translated-files/*.tsv
+          do
+            echo "$f"
+            cat "$f" | perl .github/workflows/tsvlint.pl
+          done
+  test-update-translations:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: docker compose up -d
+    - run: curl --retry 10 --retry-connrefused -sS http://localhost:8081/admin/health
+    - run: 'curl -sS -D -
+        -H "Content-type: application/json"
+        -H "x-okapi-url-to: http://localhost:8081"
+        -H "x-okapi-tenant: diku"
+        -d ''{ "module_to": "mod-inventory-storage-24.1.0",
+               "parameters": [ { "key": "loadSample",    "value": "true" },
+                               { "key": "loadReference", "value": "true" } ] }''
+        http://localhost:8081/_/tenant
+        | tee out'
+    - run: 'cat out | grep "^Location: " | tr : = | tr -d " \n\r" >> $GITHUB_ENV'
+    - run: echo $Location
+    - run: "curl -sS -D - -H 'x-okapi-tenant: diku' http://localhost:8081${Location}?wait=200000"
+    - run: "curl -sS -H 'x-okapi-tenant: diku' http://localhost:8081/item-storage/items | tee out"
+    - run: sleep 5; cat log
+    - run: cat out | jq '.items | length' | grep 10   # expect 10, the default limit of /items API
