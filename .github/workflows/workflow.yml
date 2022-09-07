@@ -22,7 +22,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - name: zookeeper, kafka
+    - name: postgres, zookeeper, kafka
       run: |
         @'
         version: "3"
@@ -60,7 +60,7 @@ jobs:
           default: 
             name: folio_network
         '@ | Out-File docker-compose.yml
-        docker-compose up -d
+        docker-compose up -d --experimental
     - run: wget https://repository.folio.org/repository/maven-releases/org/folio/mod-inventory-storage/24.1.0/mod-inventory-storage-24.1.0.jar
     - run: |
         export DB_HOST=postgres
