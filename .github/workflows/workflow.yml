@@ -22,7 +22,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - run: docker compose up -d
+    - run: cd .github; docker compose up -d
     - run: curl --retry 10 --retry-connrefused -sS http://localhost:8081/admin/health
     - run: 'curl -sS -D -
         -H "Content-type: application/json"
