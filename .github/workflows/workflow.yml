@@ -28,7 +28,7 @@ jobs:
         version: "3"
         services:
           postgres:
-            image: "postgres:12-alpine"
+            image: "postgres:12"
             environment:
               - POSTGRES_USER=folio
               - POSTGRES_PASSWORD=folio
