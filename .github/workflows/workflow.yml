@@ -60,7 +60,7 @@ jobs:
           default: 
             name: folio_network
         '@ | Out-File docker-compose.yml
-        docker-compose up -d --experimental
+        docker compose up -d --experimental
     - run: wget https://repository.folio.org/repository/maven-releases/org/folio/mod-inventory-storage/24.1.0/mod-inventory-storage-24.1.0.jar
     - run: |
         export DB_HOST=postgres
