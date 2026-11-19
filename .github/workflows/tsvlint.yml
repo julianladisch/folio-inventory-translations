@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
 jobs:
   tsvlint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - run: sudo apt install libtext-csv-perl
       - name: Check locales/*/*.tsv
         run: |
