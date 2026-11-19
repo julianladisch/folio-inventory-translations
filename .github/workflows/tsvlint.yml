@@ -10,6 +10,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - run: sudo apt install libtext-csv-perl
       - name: Check locales/*/*.tsv
         run: |
