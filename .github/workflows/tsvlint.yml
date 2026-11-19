@@ -6,6 +6,8 @@ on:
 jobs:
   tsvlint:
     runs-on: ubuntu-slim
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v7
       - run: sudo apt install libtext-csv-perl
@@ -13,6 +15,6 @@ jobs:
         run: |
           for f in locales/*/*.tsv
           do
-            printf '%s' "$f"
-            cat "$f" | perl .github/workflows/tsvlint.pl
+            printf '%s\n' "$f"
+            perl .github/workflows/tsvlint.pl < "$f"
           done
