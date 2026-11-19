@@ -9,10 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt install libtext-csv-perl
-      - name: Check translated-files/*.tsv
+      - name: Check locales/*/*.tsv
         run: |
-          for f in translated-files/*.tsv
+          for f in locales/*/*.tsv
           do
-            echo "$f"
+            printf '%s' "$f"
             cat "$f" | perl .github/workflows/tsvlint.pl
           done
